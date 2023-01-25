@@ -228,7 +228,7 @@ class DigiKeyboardDevice : public Print {
   }
 
   //private: TODO: Make friend?
-  uchar    reportBuffer[7];    // buffer for HID reports [ 1 modifier byte + (len-1) key strokes]
+  uchar    reportBuffer[8];    // buffer for HID reports [ 1 modifier byte + (len-1) key strokes]
   using Print::write;
 };
 
