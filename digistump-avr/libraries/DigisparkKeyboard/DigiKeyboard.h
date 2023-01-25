@@ -29,33 +29,52 @@ typedef uint8_t byte;
 static uchar    idleRate;           // in 4 ms units
 
 
-/* We use a simplifed keyboard report descriptor which does not support the
- * boot protocol. We don't allow setting status LEDs and but we do allow
- * simultaneous key presses.
- * The report descriptor has been created with usb.org's "HID Descriptor Tool"
- * which can be downloaded from http://www.usb.org/developers/hidpage/.
- * Redundant entries (such as LOGICAL_MINIMUM and USAGE_PAGE) have been omitted
- * for the second INPUT item.
+/* I modified the keyboard report descriptor from the simplified version to add
+ * support for the boot protocol as well as setting status LEDs.
  */
+
 const PROGMEM char usbHidReportDescriptor[USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH] = { /* USB report descriptor */
-  0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
-  0x09, 0x06,                    // USAGE (Keyboard)
-  0xa1, 0x01,                    // COLLECTION (Application)
-  0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
-  0x19, 0xe0,                    //   USAGE_MINIMUM (Keyboard LeftControl)
-  0x29, 0xe7,                    //   USAGE_MAXIMUM (Keyboard Right GUI)
-  0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-  0x25, 0x01,                    //   LOGICAL_MAXIMUM (1)
-  0x75, 0x01,                    //   REPORT_SIZE (1)
-  0x95, 0x08,                    //   REPORT_COUNT (8)
-  0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-  0x95, 0x01,           //   REPORT_COUNT (simultaneous keystrokes)
-  0x75, 0x08,                    //   REPORT_SIZE (8)
-  0x25, 0x65,                    //   LOGICAL_MAXIMUM (101)
-  0x19, 0x00,                    //   USAGE_MINIMUM (Reserved (no event indicated))
-  0x29, 0x65,                    //   USAGE_MAXIMUM (Keyboard Application)
-  0x81, 0x00,                    //   INPUT (Data,Ary,Abs)
-  0xc0                           // END_COLLECTION
+    0x05, 0x01, // Usage Page (Generic Desktop),
+    0x09, 0x06, // Usage (Keyboard),
+    0xA1, 0x01, // Collection (Application),
+    0x75, 0x01, // Report Size (1),
+    0x95, 0x08, // Report Count (8),
+
+    0x05, 0x07, // Usage Page (Key Codes),
+    0x19, 0xE0, // Usage Minimum (224),
+    0x29, 0xE7, // Usage Maximum (231),
+    0x15, 0x00, // Logical Minimum (0),
+    0x25, 0x01, // Logical Maximum (1),
+
+    0x81, 0x02, // Input (Data, Variable, Absolute),
+
+    0x95, 0x01, // Report Count (1),
+    0x75, 0x08, // Report Size (8),
+    0x81, 0x03, // Input (Constant),
+
+    0x95, 0x05, // Report Count (5),
+
+    0x75, 0x01, // Report Size (1),
+    0x05, 0x08, // Usage Page (LEDs),
+    0x19, 0x01, // Usage Minimum (1),
+    0x29, 0x05, // Usage Maximum (5),
+    0x91, 0x02, // Output (Data, Variable, Absolute),
+
+    0x95, 0x01, // Report Count (1),
+    0x75, 0x03, // Report Size (3),
+    0x91, 0x03, // Output (Constant), ;LED report
+    // padding
+    0x95, 0x06, // Report Count (6),
+    0x75, 0x08, // Report Size (8),
+
+    0x15, 0x00, // Logical Minimum (0),
+    0x25, 0x68, // Logical Maximum(104),
+    0x05, 0x07, // Usage Page (Key Codes),
+    0x19, 0x00, // Usage Minimum (0),
+    0x29, 0x68, // Usage Maximum (104),
+
+    0x81, 0x00, // Input (Data, Array),
+    0xc0        // End Collection
 };
 
 
