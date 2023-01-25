@@ -216,7 +216,7 @@ class DigiKeyboardDevice : public Print {
     memset(reportBuffer, 0, sizeof(reportBuffer));
 
     reportBuffer[0] = modifiers;
-    reportBuffer[1] = keyPress;
+    reportBuffer[2] = keyPress;
 
     usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
   }
@@ -228,7 +228,7 @@ class DigiKeyboardDevice : public Print {
   }
 
   //private: TODO: Make friend?
-  uchar    reportBuffer[2];    // buffer for HID reports [ 1 modifier byte + (len-1) key strokes]
+  uchar    reportBuffer[7];    // buffer for HID reports [ 1 modifier byte + (len-1) key strokes]
   using Print::write;
 };
 
